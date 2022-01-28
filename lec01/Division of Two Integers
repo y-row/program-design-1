@@ -1,0 +1,30 @@
+/*
+Description
+Given two integers x and y, your program should calculate the answer of x/y and print out the result according to the Output Format.
+
+Note : -𝟏𝟎³ < x, y < 𝟏𝟎³
+
+Input
+Two integers split by a space.
+
+Output
+Two values split by space:
+
+1. One digit after the decimal point.
+
+2. Two digits after the decimal point.
+
+All the values should be rounded.
+*/
+
+/*answer*/
+#include <stdio.h>
+
+int main(void){
+    float a,b;
+    double c;
+    scanf("%f%f",&a,&b);
+    c=a/b;
+    printf("%.1f %.2f",c,c);
+    return 0;
+}
