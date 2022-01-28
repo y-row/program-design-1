@@ -1,0 +1,137 @@
+/*
+1.用struct存感覺多此一舉了，還是正常寫比較快
+2.
+Input
+Five number CH, EN, MA, SO, SC, which represent the original grade of Chinese, English, Mathematics, Social studies and Science, respectively.
+
+The data type of CH, SO, SC is integer.
+
+The data type of EN, MA is float.
+
+Output
+The final grade of this student, in the format `score/points(ranks)`.
+
+Please refer to description above.
+*/
+
+
+/*answer*/
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef enum  {App=7,Ap=6,A=5,Bpp=4,Bp=3,B=2,C=1}point;//p=plus
+typedef enum {a=6,b=4,c=2}grade;
+
+ struct subject
+{
+     point p;//積點
+     grade g;//積分
+     union
+     {
+         int level_i[8];
+         float level_f[8];
+     }level;
+     union
+     {
+         int total_i;
+         float total_f;
+     }total;
+
+};
+int A_c=0,B_c=0,C_c=0,total_point=0,total_grade=0;
+void login(struct subject s);
+void login_f(struct subject s);
+
+
+int main(void)
+{
+      struct subject ch={.level.level_i={18,30,35,40,42,44,48,49}},
+                    en={.level.level_f={38.7,69.78,81.53,89.52,94.29,97.14,100,101}},
+                    ma={.level.level_f={40.19,62.31,71.92,81.15,90,93.46,100,101}},
+                    so={.level.level_i={22,38,47,55,58,60,63,64}},
+                    si={.level.level_i={19,30,37,45,49,51,54,55}};//國英數社自
+                    scanf("%d %f %f %d %d" ,&ch.total.total_i,&en.total.total_f,
+                          &ma.total.total_f,&so.total.total_i,&si.total.total_i);
+    login(ch);
+    login_f(en);
+    login_f(ma);
+    login(so);
+    login(si);
+    printf("%d/%d",total_grade,total_point);
+    if(A_c||B_c||C_c)
+    {
+        printf("(");
+        if(A_c)
+        {
+            printf("%dA",A_c);
+        }
+        if(B_c)
+        {
+            printf("%dB",B_c);
+        }
+        if(C_c)
+        {
+            printf("%dC",C_c);
+        }
+        printf(")");
+    }
+
+    return 0;
+}
+
+void login(struct subject s)
+{
+    int count=0;
+    while(s.total.total_i>*(s.level.level_i+count))
+    {
+        count++;
+    }
+    if(count>3)
+    {
+        s.g=a;
+        A_c++;
+        total_grade+=a;
+    }
+    else if(count>0)
+    {
+        s.g=b;
+        B_c++;
+        total_grade+=b;
+    }
+    else
+    {
+        s.g=c;
+        total_grade+=c;
+        C_c++;
+    }
+    s.p=count+1;
+    total_point+=s.p;
+}
+void login_f(struct subject s)
+{
+    int count=0;
+    while(s.total.total_f>*(s.level.level_f+count))
+    {
+        count++;
+    }
+    if(count>3)
+    {
+        s.g=a;
+        A_c++;
+        total_grade+=a;
+    }
+    else if(count>0)
+    {
+        s.g=b;
+        B_c++;
+        total_grade+=b;
+    }
+    else
+    {
+        s.g=c;
+        C_c++;
+        total_grade+=c;
+    }
+    s.p=count+1;
+    total_point+=s.p;
+}
