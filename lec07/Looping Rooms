@@ -1,0 +1,109 @@
+/**********************************************************
+ 
+ Input
+The first line contains a integer N,
+
+1 ≤ N ≤ 500
+
+Following N lines, each consists an integer K₀ ~ Kₙ₋₁,
+
+0 ≤ K ≤ N-1
+
+s ≠ t ⇒ Kₛ ≠ Kₜ
+
+Output
+The first line should print out how many loops are there, as
+
+"N rings"
+
+then, print the loops, one in each line, as
+
+"K₀-> K₁ -> ... -> Kₙ -> K₀"
+************************************************************/
+
+ 
+ 
+ /*******想法***********
+ 1.開陣列n+1 布林代數n+1
+ 2.讀n個值進入第一row
+ 3.將0~n-1的布林代數設為1
+ 4.進迴圈：
+    while(i!=n)
+    {
+        if(!(*(b+i)))
+        {
+            i++;
+            continue;
+        }
+        count++;
+        while(*(b+i))
+        {
+            *(b+i)=0;
+            i=*(a+i);
+        }
+
+    }
+    5.要跑圈圈就重做一次就好
+
+*****************************/
+
+#include<stdio.h>
+#include<stdbool.h>
+#define N 502
+
+int main ()
+{
+    /*step1 initialize*/
+    bool b[N]={0};
+    int a[N]={0};
+    int n;
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+    {
+        b[i]=1;
+        scanf("%d",(a+i));
+    }
+
+    /*step 2 counting*/
+    int count=0;
+    int i=0;
+    while(i!=n)
+    {
+        if(!(*(b+i)))
+        {
+            i++;
+            continue;
+        }
+        count++;
+        while(*(b+i))
+        {
+            *(b+i)=0;
+            i=*(a+i);
+        }
+
+    }
+    /*step3 printing*/
+    printf("%d rings\n",count);
+    for(int j=0;j<n;j++)
+    {
+        *(b+j)=1;
+    }
+
+     i=0;
+    while(i!=n||*(b+i)!=0)
+    {
+        if(!(*(b+i)))
+        {
+            i++;
+            continue;
+        }
+        while(*(b+i))
+        {
+            *(b+i)=0;
+            printf("%d -> ",i);
+            i=*(a+i);
+        }
+        printf("%d\n",i);
+    }
+    return 0;
+}
