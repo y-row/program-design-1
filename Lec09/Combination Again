@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+void c(int n,int m,int *count);
+int count=1;
+int main(void){
+    int m,n;
+    scanf("%d %d",&n,&m);
+    c(n,m,&count);
+    printf("%d",count/2);
+    return 0;
+}
+
+
+void c(int n,int m,int * count)
+{
+    (*count)++;
+    if(n==m||m==0)
+    {
+        return ;
+    }
+    else
+    {
+         c(n-1,m-1,count);
+         c(n-1,m,count);
+    }
+}
