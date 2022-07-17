@@ -1,0 +1,126 @@
+#include<stdio.h>
+#define X 10001
+#define Y 100
+char hex(int x);
+int getsecret(int a[],int size);
+int main()
+{
+    char c=0;
+    int k=0;
+    int array[X];
+/*由陣列的第0格開始儲存數字*/
+    c=getchar();
+    while(c!='\n')
+    {
+        if(c>='A'&&c<='Z')
+        {
+            c=c-'A'+'a';
+        }
+        array[k]=c;
+        k++;
+        c=getchar();
+    }
+
+    getsecret(array,k);
+    return 0;
+}
+int getsecret(int a[],int size)
+{
+    if(size==1)
+    {
+        printf("%c",a[0]);
+        return 0 ;
+    }
+    /*結果相關的變數*/
+    int resod[Y]={0}; //odd
+    int resev[Y]={0}; // even
+    int duplicate[Y]={0};//結果陣列儲存
+
+    /*第一步驟要用的變數*/
+    int odsum=0;
+    int evensum=0;
+    int j=1;
+    int k=2;
+
+    /*第二步驟要用的變數*/
+    int digit_odsum=0;
+    int digit_evsum=0;
+    int n2=0;
+    int n1=0;
+    int s;//除法找16進位
+
+    /*1.算出奇數、偶數的和*/
+    for(j=1;j<size;j+=2)
+    {
+        if(a[j]>='a')
+        {
+            odsum+=a[j]-'a'+10;
+        }
+        else
+        {
+            odsum+=a[j]-'0';
+        }
+    }
+    for(k=0;k<size;k+=2)
+    {
+        if(a[k]>='a')
+        {
+            evensum+=a[k]-'a'+10;
+        }
+        else
+        {
+            evensum+=a[k]-'0';
+        }
+    }
+
+    /*2.將odsum,evsum轉成hex存進新的get secret陣列*/
+    do
+    {
+        n1=odsum%16;
+        odsum/=16;
+        duplicate[digit_odsum]=n1; //將位數倒過來存 第一個存在0
+        digit_odsum++;
+    }while(odsum!=0);
+    /*將dup內的數字以hex存入resod 第一個存在1(滿足a[]的格式)*/
+    for(j=0;j<digit_odsum;j++)
+    {
+        resod[j]=hex(duplicate[digit_odsum-j-1]);
+        duplicate[digit_odsum-j]=0;//初始化
+    }
+    /*同樣操作：dup先初始化*/
+    do
+    {
+        n2=evensum%16;
+        evensum/=16;
+        duplicate[digit_evsum]=n2;
+        digit_evsum++;
+    }while(evensum!=0);
+    for(k=0;k<digit_evsum;k++)
+    {
+        resev[k]=hex(duplicate[digit_evsum-k-1]);
+        //printf("%c\n",resod[n2]);
+    }
+    /*3.遞迴呼叫 */
+	if(digit_evsum!=0)getsecret(resev,digit_evsum);
+    if(digit_odsum!=0)getsecret(resod,digit_odsum);
+	
+    
+
+
+}
+
+char hex(int x)
+{
+    char c=0;
+    if (0<=x&&x<=9)
+    {
+        c=x+'0';
+        return c;
+    }
+    else
+    {
+        c=x+'a'-10;
+        return c;
+    }
+
+}
