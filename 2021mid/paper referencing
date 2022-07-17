@@ -1,0 +1,97 @@
+
+>>>code>>>
+#include<stdio.h>
+#include<stdbool.h>
+int main()
+{
+    int x;
+    int c=0;
+    char space='1';
+    int line=0;
+    int append=0;
+    int m,n;
+    scanf("%d",&x);
+
+    /*雙層迴圈存取我要ㄉ資料*/
+    int i,j;
+    bool ar[x+1][102];
+    for(i=0;i<=x;i++)
+    {
+        for(j=0;j<102;j++)
+        {
+            ar[i][j]=0;
+        }
+    }
+
+
+    /*對角為1,每當scanf入新列:將內容物也改為1*/
+	for(i=1;i<=x;i++)
+	{
+		ar[i][i]=1;
+	}
+    scanf("%d",&c);
+    while(c!=0)
+    {
+        m=c;
+        i=1;
+        space=getchar();
+		ar[m][0]=1;//代表第m篇論文輸入過引用
+		
+        /*space沒讀到換行代表此列尚未結束*/
+
+        while(space==' ')
+        {
+            scanf("%d",&c);
+            space = getchar();
+            ar[m][c]=1;
+            
+		/*檢查c號論文引用的論文數append進m號論文*/
+        
+			if(ar[c][0]!=0)
+            {
+                for(int k=1;k<=100;k++)
+				{
+					if(ar[c][k]==1)
+					{
+						ar[m][k]=1;
+					}
+				}
+            }
+        }
+
+        /*出迴圈時，space為\n,檢查先前的input中此論文的狀況，將我的值輸入進去*/
+		for(int k=1;k<=x;k++)
+		{
+			if(ar[k][0]==1)
+			{
+				if(ar[k][m]==1)
+				{
+					for(append=1;append<=100;append++)
+					{
+						if(ar[m][append]==1)
+						{
+							ar[k][append]=1;
+						}
+					}
+				}
+			}
+		}
+
+        scanf("%d",&c);
+
+    }
+
+
+    for(i=1;i<=x;i++)
+    {
+        printf("%d ->",i);
+        for(j=1;j<=100;j++)
+        {
+            if(ar[i][j]==1)
+            {
+                printf(" %d",j);
+            }
+        }
+        printf("\n");
+    }
+}
