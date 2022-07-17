@@ -1,0 +1,104 @@
+>>>command>>>
+輸入敵人的座標，幫你轉成極座標
+>>>code>>>
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define MAX_N 1024
+
+void convert_to_polar(int *coords, int N);
+
+int main()
+{
+    int N, coords[MAX_N + 1][2];
+    scanf("%d", &N);
+
+    for (int i = 0; i < N; i++)
+        scanf("%d%d", &coords[i][0], &coords[i][1]);
+
+
+    convert_to_polar((int *) coords, N);
+
+    return 0;
+}
+
+/*atan輸入比值 轉為弧度;hypot支援負號*/
+
+void convert_to_polar(int *coords, int N)
+{
+    int *start=coords;
+    int radius=0;
+    int deg=0;
+    int q;//第幾象限;
+    double polar[MAX_N + 1][2]={0};
+    double *p=polar;
+    double test;
+    for(int i=0;i<2*N;i+=2)
+    {
+
+        /*第一象限*/
+        if(*start>0&&*(start+1)>0)
+        {
+           // *(p+1)=(double)sqrt(((*start)*(*start))+((*(start+1))*(*(start+1))));
+            *(p+1)=hypot(*start,*(start+1));
+            *(p)=atan((double)*(start+1)/(*start))/M_PI*180;
+        }
+        /*x=0;在y軸上*/
+        else if(*start==0)
+        {
+            /*敵人竟是我自己的*/
+            if(*(start+1)==0)
+            {
+                *p=0;
+                *(p+1)=0;
+            }
+            else if(*(start+1)>0)
+            {
+                *p=90.00;
+                *(p+1)=*(start+1);
+
+            }
+            else
+            {
+                *p = 270.00;
+                *(p + 1) = -(*(start + 1));
+            }
+        }
+        /*y=0;在x軸上*/
+        else if(*(start+1)==0)
+        {
+            if(*start>0)
+            {
+                *p=0.00;
+                *(p+1)=*start;
+            }
+            else
+            {
+                *p=180.00;
+                *(p+1)=-(*start);
+            }
+        }
+        /*x<0;第二三像限*/
+        else if(*start<0)
+        {
+            *(p+1)=hypot(*start,*(start+1));
+            *(p)=atan((double)*(start+1)/(*start))/M_PI*180+180;
+        }
+        /*第四象限*/
+        else
+        {
+            *(p+1)=hypot(*start,*(start+1));
+            *(p)=atan((double)*(start+1)/(*start))/M_PI*180+360;
+        }
+        p+=2;
+        start+=2;
+    }
+
+    for(int i=0;i<N;i++)
+    {
+        printf("%.2lf %.2lf\n",polar[i][0],polar[i][1]);
+    }
+}
